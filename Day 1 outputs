@@ -196,6 +196,153 @@ Try: apt install <deb name>
 root@rps-virtual-machine:~# 
 
 
-Super - root@123  to change the configuration 
+Super - root@123  to change the configuration and login with super user
+
+::
+::      >> export P4PORT=localhost:1666
+::      >> export P4USER=super
+::
+::      >> p4 login
+
+
+>> p4 info    - This will show you all the information related to perforce server and client 
+
+User name: super
+Client name: rps-virtual-machine
+Client host: rps-virtual-machine
+Client unknown.
+Current directory: /opt/perforce/sbin
+Peer address: 127.0.0.1:40050
+Client address: 127.0.0.1
+Server address: localhost:1666
+Server root: /opt/perforce/servers/perforce/root
+Server date: 2024/05/06 10:00:32 +0530 IST
+Server uptime: 00:12:21
+Server version: P4D/LINUX26X86_64/2023.2/2578891 (2024/03/29)
+ServerID: perforce
+Server services: commit-server
+Server license: none
+Case Handling: sensitive
+
+>>  vim /etc/perforce/p4dctl.conf  - To see the Perforce configuration, environment veriable 
+>>  CD  /etc/perforce/p4dctl.conf   - User specific configuraiton 
+
+** Under vim /etc/perforce/p4dctl.conf/perforce.conf  - you will able to see all the user related configuraiton
+
+** Perforce can manage Binaries but clearcase can only manage source code and perforce is good in speed
+you can work on perforce git in offline mode
+
+** Perforce Server has repository and the repository has one to many deports. expact
+
+
+Q --  What is perforce repository ?
+-- Container of perforcoe deports
+-One Perforce manages just one Perforce repository
+
+Q2 --  what is perforce Depot
+
+-- Perforce repository has one to many depot
+-- Derectory Structure where perforce manages the changes done to project source code.
+-- Can have many subfolders
+
+Q3 -- What is perforce workspace
+-- 
+Q4  ---  What is perforce Change list?
+
+you can have multiple change list ( in the change list have multiple changes from different \
+files and directory also you can create another changelist if it is for different project 
+while submiting you can select change list which you would like to submit
+
+
+** p4 depots -- will show depots details 
+
+**   StreamDepth:    //myproject/1  - This one you can change as per requirement how much depth we need like 
+     how much depth they need for the depot
+
+** p4 depot -t stream myproject  -- will create depot with this command also you can edit with the same command.
+
+**  p4 stream -t mainline //myproject/main - to create branch / stream under the project 
+      Stream //myproject/main saved.
+
+** p4 streams  - to view list of streams 
+
+
+Create depot, stream and client    while deleting delte first client, stream and then depot 
+
+p4 depot -t stream depot2
+  145  p4 depot depot2
+  146  p4 stream -t mainline //depot2/admin/main
+  147  p4 stream main
+  148  p4 streams
+  149  p4 stream -d //myproject/main
+  150  p4 streams
+  151  p4 client hello_ws
+
+  154  mkdir hello
+  155  cd hello/
+  156  ls
+  157  git clone https://github.com/tektutor/spring-ms.git
+  158  export P4CLIENT=hello_ws
+  159  echo $P4CLIENT
+  160  cd ..
+  161  p4 add hello/...  ---- added file from the folder 
+  162  p4 submit  - P4 submit 
+  163  p4 client -d hello_ws
+  164  p4 stream -d //depot2/admin/main
+  165  p4 stream --obliterate -y //depot2/admin/main
+  166  p4 depot --obliterate depot2
+  167  p4 depot --obliterate //depot2
+  168  p4 obliterate //depot2/admin/main/...
+  169  p4 obliterate -y //depot2/admin/main/...
+  170  p4 depot -d depot2
+
+
+p4 depot -t stream pramod-depot ---  create depot
+
+p4 stream -t mainline //pramod-depot/main  --- Create Stream mainline 
+p4 stream -t development //pramod-depot/dev  --- Create Stream development Parent would be //pramod-depot/main
+
+p4 client main_ws  -- create client for main stream 
+4 client dev_ws -- create client for dev stream 
+cd /home/rps/
+mkdir dev
+ mkdir main
+
+cd main/
+
+echo "hello" > sa.txt
+p4 add sa.txt 
+p4 submit
+
+p4 stream -t release //pramod-depot/release
+p4 client rel_ws
+export P4CLIENT=rel_ws
+mkdir rel
+cd rel/
+echo "hello" 1.txt
+p4 add 1.txt
+p4 submit
+
+  145  p4 client rel_ws
+  146  p4 stream -t release //pramod-depot/release
+
+  152  p4 submit -c 34
+  153  p4 print -a //pramod-depot
+  154  p4 print -a //pramod-depot/...
+
+
+in P4V you can copy the data for main to Dev and Dev to release 
+
+
+
+
+
+
+
+
+
+
+
+
 
 
